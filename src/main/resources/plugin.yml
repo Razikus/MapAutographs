@@ -1,0 +1,6 @@
+name: MapAutographs
+version: 1.0
+main: eu.razniewski.countries.Countries
+commands:
+    autograph:
+        usage: /autograph
