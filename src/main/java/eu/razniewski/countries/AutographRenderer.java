@@ -5,6 +5,7 @@
  */
 package eu.razniewski.countries;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;
@@ -36,7 +37,7 @@ class AutographRenderer extends MapRenderer {
             }
         }
         mc.drawText(15, 15, MinecraftFont.Font, autograph.getAdditionalText());
-        mc.drawText(autograph.getxSign(), autograph.getySign(), MinecraftFont.Font, autograph.getNickname());
+        mc.drawText(autograph.getxSign(), autograph.getySign(), MinecraftFont.Font, autograph.getNicknamePrefix() + autograph.getNickname());
     }
 
 }
