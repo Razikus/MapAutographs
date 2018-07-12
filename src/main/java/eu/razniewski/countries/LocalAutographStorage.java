@@ -89,5 +89,10 @@ public class LocalAutographStorage implements AutographStorage{
         }
         
     }
+
+    @Override
+    public Short[] getIds() {
+        return this.container.getWholeMap().keySet().toArray(new Short[this.container.getWholeMap().keySet().size()]);
+    }
     
 }

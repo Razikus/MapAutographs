@@ -14,6 +14,7 @@ import java.util.Optional;
 public interface AutographStorage {
     public Optional<Autograph> getMapById(Short id);
     public void addMap(Short id, Autograph autograph);
+    public Short[] getIds();
     
     public void onLoad();
     public void onDisable();
