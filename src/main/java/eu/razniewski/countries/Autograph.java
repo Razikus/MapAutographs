@@ -5,6 +5,7 @@
  */
 package eu.razniewski.countries;
 
+import java.io.Serializable;
 import java.util.Objects;
 import org.bukkit.map.MapPalette;
 
@@ -12,7 +13,7 @@ import org.bukkit.map.MapPalette;
  *
  * @author adamr
  */
-public class Autograph {
+public class Autograph implements Serializable{
     private byte bgColor;
     private int xSign;
     private int ySign;

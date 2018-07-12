@@ -13,10 +13,10 @@ import org.bukkit.entity.Player;
  *
  * @author adamr
  */
-public class TemporaryAutographContainer {
+public class CachedAutographContainer {
     private Map<Short, Autograph> map;
 
-    public TemporaryAutographContainer() {
+    public CachedAutographContainer() {
         this.map = new HashMap<>();
     }
 
@@ -38,6 +38,10 @@ public class TemporaryAutographContainer {
 
     public Autograph put(Short key, Autograph value) {
         return map.put(key, value);
+    }
+    
+    public Map<Short, Autograph> getWholeMap() {
+        return this.map;
     }
     
     

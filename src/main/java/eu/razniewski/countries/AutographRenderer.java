@@ -5,6 +5,7 @@
  */
 package eu.razniewski.countries;
 
+import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
@@ -18,19 +19,20 @@ import org.bukkit.map.MinecraftFont;
  */
 class AutographRenderer extends MapRenderer {
 
-    private TemporaryAutographContainer container;
+    private AutographStorage container;
 
-    public AutographRenderer(TemporaryAutographContainer container) {
+    public AutographRenderer(AutographStorage container) {
         this.container = container;
     }
 
     @Override
     public void render(MapView mv, MapCanvas mc, Player player) {
-        Autograph autograph = container.get(mv.getId());
-        if (autograph == null) {
+        Optional<Autograph> autographOptional = container.getMapById(mv.getId());
+        if (!autographOptional.isPresent()) {
             mc.drawText(15, 15, MinecraftFont.Font, ":(");
             return;
         }
+        Autograph autograph = autographOptional.get();
         for (int x = 0; x < 150; x++) {
             for (int y = 0; y < 150; y++) {
                 mc.setPixel(x, y, autograph.getBgColor());

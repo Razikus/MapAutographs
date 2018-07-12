@@ -14,19 +14,20 @@ import org.bukkit.plugin.java.JavaPlugin;
  *
  * @author adamr
  */
-public class Countries extends JavaPlugin {
+public class MapAutographs extends JavaPlugin {
 
-    private TemporaryAutographContainer autographPermissions;
+    private AutographStorage autographService;
     
     @Override
     public void onEnable() {
-        this.autographPermissions = new TemporaryAutographContainer();
-        getCommand("autograph").setExecutor(new AutographCreator(autographPermissions));
+        this.autographService = new LocalAutographStorage(this);
+        autographService.onLoad();
+        getCommand("autograph").setExecutor(new AutographCreator(autographService));
     }
 
     @Override
     public void onDisable() {
-        this.autographPermissions.removeAll();
+        autographService.onDisable();
         
     }
     

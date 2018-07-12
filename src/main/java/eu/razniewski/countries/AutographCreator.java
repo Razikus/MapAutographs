@@ -23,9 +23,9 @@ import org.bukkit.map.MapView;
  */
 public class AutographCreator implements CommandExecutor {
 
-    private TemporaryAutographContainer container;
+    private AutographStorage container;
 
-    public AutographCreator(TemporaryAutographContainer container) {
+    public AutographCreator(AutographStorage container) {
         this.container = container;
     }
     
@@ -82,7 +82,7 @@ public class AutographCreator implements CommandExecutor {
             
             
             MapView mapView = Bukkit.createMap(player.getWorld());
-            container.put(mapView.getId(), autograph);
+            container.addMap(mapView.getId(), autograph);
             mapView.setScale(MapView.Scale.FARTHEST);
             mapView.setUnlimitedTracking(false);
 
