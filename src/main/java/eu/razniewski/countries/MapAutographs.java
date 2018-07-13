@@ -5,6 +5,9 @@
  */
 package eu.razniewski.countries;
 
+import eu.razniewski.countries.config.ConfigGate;
+import eu.razniewski.countries.config.LocalConfig;
+import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.event.server.MapInitializeEvent;
 import org.bukkit.map.MapRenderer;
@@ -19,9 +22,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class MapAutographs extends JavaPlugin {
 
     private AutographStorage autographService;
+    private ConfigGate config;
+    private ConfigGate locale;
     
     @Override
     public void onEnable() {
+        checkForDataFolder();
+        config = new LocalConfig(this, "config.properties");
+        locale = new LocalConfig(this, "locale.properties");
+        config.loadConfig();
+        locale.loadConfig();
         this.autographService = new LocalAutographStorage(this);
         autographService.onLoad();
         registerMaps(autographService.getIds());
@@ -31,6 +41,8 @@ public class MapAutographs extends JavaPlugin {
     @Override
     public void onDisable() {
         autographService.onDisable();
+        config.saveConfig();
+        locale.saveConfig();
         
     }
 
@@ -42,6 +54,12 @@ public class MapAutographs extends JavaPlugin {
             mapView.removeRenderer(mapView.getRenderers().get(0));
             MapRenderer renderer = new AutographRenderer(autographService);
             mapView.addRenderer(renderer);
+        }
+    }
+
+    private void checkForDataFolder() {
+        if(!getDataFolder().exists()) {
+            getDataFolder().mkdirs();
         }
     }
     
