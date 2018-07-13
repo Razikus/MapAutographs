@@ -5,6 +5,7 @@
  */
 package eu.razniewski.countries;
 
+import eu.razniewski.countries.config.ConfigGate;
 import java.util.HashMap;
 import java.util.HashSet;
 import org.bukkit.Bukkit;
@@ -14,6 +15,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
 
@@ -24,9 +26,11 @@ import org.bukkit.map.MapView;
 public class AutographCreator implements CommandExecutor {
 
     private AutographStorage container;
+    private ConfigGate locales;
 
-    public AutographCreator(AutographStorage container) {
+    public AutographCreator(AutographStorage container, ConfigGate locales) {
         this.container = container;
+        this.locales = locales;
     }
     
     
@@ -38,7 +42,7 @@ public class AutographCreator implements CommandExecutor {
             
             Player player = (Player) cs;
             if(!player.hasPermission(AutographPermission.CREATE.getPermission())) {
-                player.sendMessage("No permission :(");
+                player.sendMessage(locales.getValueNotNull("noPermissionToCreate"));
                 return false;
             }
             
@@ -52,16 +56,16 @@ public class AutographCreator implements CommandExecutor {
             }
             
             if(playerMap == null) {
-                player.sendMessage("You have to have empty map!");
+                player.sendMessage(locales.getValueNotNull("noEmptyMap"));
                 return false;
             } 
             
             Autograph autograph = null;
             if(strings.length == 0) {
-                autograph = new Autograph((byte) 32, 15, 100, "Greetings,", player.getName(), "");
+                autograph = new Autograph(Byte.valueOf(locales.getValueNotNull("defaultBackground")), Integer.valueOf(locales.getValueNotNull("defaultX")), Integer.valueOf(locales.getValueNotNull("defaultY")), locales.getValueNotNull("defaultAdditionalText"), player.getName(), locales.getValueNotNull("defaultNicknamePrefix"));
             } else {
                 if(!player.hasPermission(AutographPermission.CUSTOM.getPermission())) {
-                    player.sendMessage("You have no permissions to do custom autographs!");
+                    player.sendMessage(locales.getValueNotNull("noPermissionsToCustom"));
                     return false;
                 }
                 try {
@@ -71,11 +75,16 @@ public class AutographCreator implements CommandExecutor {
                     String prefix = strings[3];
                     String additional = "";
                     for(int j = 4; j < strings.length; j++) {
-                        additional = additional + " " + strings[j];
+                        additional = additional + strings[j] + " ";
                     }
+                    additional = additional.replaceAll("&n", "\n");
+                    additional = additional.replaceAll("&", "§");
+                    prefix = prefix.replaceAll("&n", "\n");
+                    prefix = prefix.replaceAll("&", "§");
+                    
                     autograph = new Autograph(bgColor, xSign, ySign, additional, player.getName(), prefix);
                 } catch(Exception e) {
-                    player.sendMessage("Usage: /autograph COLOR XOFSIGN YOFSIGN PREFIXOFNICKNAME ADDITIONALMESSAGE");
+                    player.sendMessage(locales.getValueNotNull("usageInfo"));
                     return false;
                 }
             }
@@ -90,9 +99,16 @@ public class AutographCreator implements CommandExecutor {
             MapRenderer renderer = new AutographRenderer(container);
             mapView.addRenderer(renderer);
             
-            player.getInventory().remove(playerMap);
+            if(playerMap.getAmount() > 1) {
+                playerMap.setAmount(playerMap.getAmount() -1);
+            } else {
+                player.getInventory().remove(playerMap);
+            }
             
             ItemStack map = new ItemStack(Material.MAP);
+            ItemMeta meta = map.getItemMeta();
+            meta.setDisplayName(locales.getValueNotNull("defaultAutographPrefix") + player.getName() + " " + locales.getValueNotNull("defaultAutographName"));
+            map.setItemMeta(meta);
             map.setDurability(mapView.getId());
             player.getInventory().addItem(map);
             player.sendMap(mapView);

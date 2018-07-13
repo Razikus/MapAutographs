@@ -6,6 +6,7 @@
 package eu.razniewski.countries;
 
 import eu.razniewski.countries.config.ConfigGate;
+import eu.razniewski.countries.config.DefaultConfigEntry;
 import eu.razniewski.countries.config.LocalConfig;
 import java.io.File;
 import org.bukkit.Bukkit;
@@ -29,13 +30,13 @@ public class MapAutographs extends JavaPlugin {
     public void onEnable() {
         checkForDataFolder();
         config = new LocalConfig(this, "config.properties");
-        locale = new LocalConfig(this, "locale.properties");
+        locale = new LocalConfig(this, "locale.properties", getDefaultLocales());
         config.loadConfig();
         locale.loadConfig();
         this.autographService = new LocalAutographStorage(this);
         autographService.onLoad();
         registerMaps(autographService.getIds());
-        getCommand("autograph").setExecutor(new AutographCreator(autographService));
+        getCommand("autograph").setExecutor(new AutographCreator(autographService, locale));
     }
 
     @Override
@@ -61,6 +62,25 @@ public class MapAutographs extends JavaPlugin {
         if(!getDataFolder().exists()) {
             getDataFolder().mkdirs();
         }
+    }
+
+    // @TODO - get rid of this in future
+    private DefaultConfigEntry[] getDefaultLocales() {
+        
+        LocaleBuilder builder = new LocaleBuilder();
+        return builder.addNext("noPermissionToCreate", "No permissions :(")
+                .addNext("noEmptyMap", "No empty map")
+                .addNext("defaultBackground", "32")
+                .addNext("defaultX", "15")
+                .addNext("defaultY", "100")
+                .addNext("defaultAdditionalText", "§4;Always for\nyou,")
+                .addNext("defaultNicknamePrefix", "§16;")
+                .addNext("noPermissionsToCustom", "No permissions to make custom autograph")
+                .addNext("usageInfo", "Usage: /autograph COLOR XOFSIGN YOFSIGN PREFIXOFNICKNAME ADDITIONALMESSAGE")
+                .addNext("defaultAutographPrefix", "§3")
+                .addNext("defaultAutographName", "autograph").build();
+                
+                
     }
     
 }

@@ -14,6 +14,7 @@ import java.util.Properties;
 public interface ConfigGate {
     public Properties getConfig();
     public String getValue(String key);
+    public String getValueNotNull(String key);
     public void saveConfig();
     public void loadConfig();
 }

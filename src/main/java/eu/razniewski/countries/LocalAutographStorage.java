@@ -63,8 +63,6 @@ public class LocalAutographStorage implements AutographStorage{
         try {
             JsonReader reader = new JsonReader(new FileReader(plugin.getDataFolder().getAbsolutePath() + "/storage.json"));
             Map<Short, Autograph> map = gson.fromJson(reader, type);
-            Bukkit.getLogger().info(map + "");
-            System.out.println(map);
             if(map == null) {
                 map = new HashMap<>();
             }

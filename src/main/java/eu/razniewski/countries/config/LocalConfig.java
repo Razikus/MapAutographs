@@ -24,9 +24,11 @@ public class LocalConfig implements ConfigGate{
     private JavaPlugin plugin;
     private Properties loaded;
     private String name; 
-    public LocalConfig(JavaPlugin plugin, String name) {
+    private DefaultConfigEntry[] entries;
+    public LocalConfig(JavaPlugin plugin, String name, DefaultConfigEntry ... entries) {
         this.plugin = plugin;
         this.name = name;
+        this.entries = entries;
     }
     
     @Override
@@ -63,11 +65,28 @@ public class LocalConfig implements ConfigGate{
             loaded.load(input);
             input.close();
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(LocalConfig.class.getName()).log(Level.SEVERE, null, ex);
+            initializeConfigWithDefaultValues();
         } catch (IOException ex) {
             Logger.getLogger(LocalConfig.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+
+    private void initializeConfigWithDefaultValues() {
+        for(DefaultConfigEntry entry: entries) {
+            loaded.put(entry.getKey(), entry.getValue());
+        }
+        saveConfig();
+    }
+
+    @Override
+    public String getValueNotNull(String key) {
+        String value = loaded.getProperty(key);
+        if(value == null) {
+            return key;
+        } else {
+            return value;
+        }
     }
     
 }
