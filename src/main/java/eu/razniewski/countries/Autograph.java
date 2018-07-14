@@ -7,7 +7,6 @@ package eu.razniewski.countries;
 
 import java.io.Serializable;
 import java.util.Objects;
-import org.bukkit.map.MapPalette;
 
 /**
  *

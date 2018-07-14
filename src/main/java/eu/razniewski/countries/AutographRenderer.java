@@ -6,7 +6,6 @@
 package eu.razniewski.countries;
 
 import java.util.Optional;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.map.MapCanvas;
 import org.bukkit.map.MapRenderer;

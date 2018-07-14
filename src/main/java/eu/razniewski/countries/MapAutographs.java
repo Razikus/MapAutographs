@@ -8,12 +8,9 @@ package eu.razniewski.countries;
 import eu.razniewski.countries.config.ConfigGate;
 import eu.razniewski.countries.config.DefaultConfigEntry;
 import eu.razniewski.countries.config.LocalConfig;
-import java.io.File;
 import org.bukkit.Bukkit;
-import org.bukkit.event.server.MapInitializeEvent;
 import org.bukkit.map.MapRenderer;
 import org.bukkit.map.MapView;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**

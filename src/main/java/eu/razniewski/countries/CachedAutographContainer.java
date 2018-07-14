@@ -7,7 +7,6 @@ package eu.razniewski.countries;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.entity.Player;
 
 /**
  *

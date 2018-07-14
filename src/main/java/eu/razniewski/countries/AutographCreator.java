@@ -6,8 +6,6 @@
 package eu.razniewski.countries;
 
 import eu.razniewski.countries.config.ConfigGate;
-import java.util.HashMap;
-import java.util.HashSet;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
