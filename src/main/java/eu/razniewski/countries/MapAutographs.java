@@ -25,22 +25,32 @@ public class MapAutographs extends JavaPlugin {
     
     @Override
     public void onEnable() {
+        getLogger().info("Loading MapAutographs...");
         checkForDataFolder();
+        getLogger().info("Loading config and locales...");
         config = new LocalConfig(this, "config.properties");
         locale = new LocalConfig(this, "locale.properties", getDefaultLocales());
         config.loadConfig();
         locale.loadConfig();
         this.autographService = new LocalAutographStorage(this);
+        getLogger().info("Executing onLoad of " + autographService.getClass().getName() + "...");
         autographService.onLoad();
+        getLogger().info("Registering map ids...");
         registerMaps(autographService.getIds());
+        getLogger().info("Registering command /autograph...");
         getCommand("autograph").setExecutor(new AutographCreator(autographService, locale));
+        getLogger().info("MapAutographs are ready for use!");
     }
 
     @Override
     public void onDisable() {
+        getLogger().info("Disabling MapAutographs...");
+        getLogger().info("Executing onDisable of " + autographService.getClass().getName() + "...");
         autographService.onDisable();
+        getLogger().info("Saving config and locales...");
         config.saveConfig();
         locale.saveConfig();
+        getLogger().info("MapAutographs disabled!");
         
     }
 
