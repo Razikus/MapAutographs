@@ -25,10 +25,12 @@ public class AutographCreator implements CommandExecutor {
 
     private AutographStorage container;
     private ConfigGate locales;
+    private ConfigGate config;
 
-    public AutographCreator(AutographStorage container, ConfigGate locales) {
+    public AutographCreator(AutographStorage container, ConfigGate locales, ConfigGate config) {
         this.container = container;
         this.locales = locales;
+        this.config = config;
     }
     
     
@@ -39,7 +41,7 @@ public class AutographCreator implements CommandExecutor {
         if (cs instanceof Player) {
             
             Player player = (Player) cs;
-            if(!player.hasPermission(AutographPermission.CREATE.getPermission())) {
+            if(!player.hasPermission(config.getValueOrDefault("autographCreatePermission", "autograph.create"))) {
                 player.sendMessage(locales.getValueNotNull("noPermissionToCreate"));
                 return false;
             }
@@ -62,8 +64,8 @@ public class AutographCreator implements CommandExecutor {
             if(strings.length == 0) {
                 autograph = new Autograph(Byte.valueOf(locales.getValueNotNull("defaultBackground")), Integer.valueOf(locales.getValueNotNull("defaultX")), Integer.valueOf(locales.getValueNotNull("defaultY")), locales.getValueNotNull("defaultAdditionalText"), player.getName(), locales.getValueNotNull("defaultNicknamePrefix"));
             } else {
-                if(!player.hasPermission(AutographPermission.CUSTOM.getPermission())) {
-                    player.sendMessage(locales.getValueNotNull("noPermissionsToCustom"));
+                if(!player.hasPermission(config.getValueOrDefault("autographCreatePermission", "autograph.create"))) {
+                    player.sendMessage(locales.getValueOrDefault("autographCustomPermission", "autograph.custom"));
                     return false;
                 }
                 try {

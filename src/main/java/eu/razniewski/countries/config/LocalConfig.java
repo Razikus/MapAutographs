@@ -88,5 +88,15 @@ public class LocalConfig implements ConfigGate{
             return value;
         }
     }
+
+    @Override
+    public String getValueOrDefault(String key, String defaultValue) {
+        String value = loaded.getProperty(key);
+        if(value == null) {
+            return defaultValue;
+        } else {
+            return value;
+        }
+    }
     
 }

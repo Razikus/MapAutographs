@@ -5,6 +5,7 @@
  */
 package eu.razniewski.countries;
 
+import eu.razniewski.countries.config.ConfigEntryBuilder;
 import eu.razniewski.countries.config.ConfigGate;
 import eu.razniewski.countries.config.DefaultConfigEntry;
 import eu.razniewski.countries.config.LocalConfig;
@@ -28,17 +29,17 @@ public class MapAutographs extends JavaPlugin {
         getLogger().info("Loading MapAutographs...");
         checkForDataFolder();
         getLogger().info("Loading config and locales...");
-        config = new LocalConfig(this, "config.properties");
+        config = new LocalConfig(this, "config.properties", getDefaultConfig());
         locale = new LocalConfig(this, "locale.properties", getDefaultLocales());
         config.loadConfig();
         locale.loadConfig();
-        this.autographService = new LocalAutographStorage(this);
+        this.autographService = new LocalAutographStorage(this, config.getValueOrDefault("storageFile", "storage.json"));
         getLogger().info("Executing onLoad of " + autographService.getClass().getName() + "...");
         autographService.onLoad();
         getLogger().info("Registering map ids...");
         registerMaps(autographService.getIds());
         getLogger().info("Registering command /autograph...");
-        getCommand("autograph").setExecutor(new AutographCreator(autographService, locale));
+        getCommand("autograph").setExecutor(new AutographCreator(autographService, locale, config));
         getLogger().info("MapAutographs are ready for use!");
     }
 
@@ -74,7 +75,7 @@ public class MapAutographs extends JavaPlugin {
     // @TODO - get rid of this in future
     private DefaultConfigEntry[] getDefaultLocales() {
         
-        LocaleBuilder builder = new LocaleBuilder();
+        ConfigEntryBuilder builder = new ConfigEntryBuilder();
         return builder.addNext("noPermissionToCreate", "No permissions :(")
                 .addNext("noEmptyMap", "No empty map")
                 .addNext("defaultBackground", "32")
@@ -88,6 +89,13 @@ public class MapAutographs extends JavaPlugin {
                 .addNext("defaultAutographName", "autograph").build();
                 
                 
+    }
+
+    private DefaultConfigEntry[] getDefaultConfig() {
+        ConfigEntryBuilder builder = new ConfigEntryBuilder();
+        return builder.addNext("storageFile", "storage.json")
+                .addNext("autographCreatePermission", "autograph.create")
+                .addNext("autographCustomPermission", "autograph.custom").build();
     }
     
 }
