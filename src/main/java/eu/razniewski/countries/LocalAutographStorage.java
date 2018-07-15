@@ -52,7 +52,7 @@ public class LocalAutographStorage implements AutographStorage{
         Gson gson = new Gson();
         TypeToken s;
         Type type = new TypeToken<Map<Short, Autograph>>(){}.getType();
-        File storage = new File(plugin.getDataFolder() + fileName);
+        File storage = new File(plugin.getDataFolder() + "/" + fileName);
         if(!storage.exists()) {
             storage.getParentFile().mkdirs();
             try {
@@ -62,7 +62,7 @@ public class LocalAutographStorage implements AutographStorage{
             }
         }
         try {
-            JsonReader reader = new JsonReader(new FileReader(plugin.getDataFolder().getAbsolutePath() + fileName));
+            JsonReader reader = new JsonReader(new FileReader(plugin.getDataFolder().getAbsolutePath() + "/" + fileName));
             Map<Short, Autograph> map = gson.fromJson(reader, type);
             if(map == null) {
                 map = new HashMap<>();
@@ -81,7 +81,7 @@ public class LocalAutographStorage implements AutographStorage{
     @Override
     public void onDisable() {
         Gson gson = new Gson();
-        try (Writer writer = new FileWriter(plugin.getDataFolder().getAbsolutePath() + fileName)) {
+        try (Writer writer = new FileWriter(plugin.getDataFolder().getAbsolutePath() + "/" + fileName)) {
             gson.toJson(container.getWholeMap(), writer);
         } catch (IOException ex) {
             Logger.getLogger(LocalAutographStorage.class.getName()).log(Level.SEVERE, null, ex);
